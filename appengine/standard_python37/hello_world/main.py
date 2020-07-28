@@ -1,30 +1,36 @@
-# Copyright 2018 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# [START gae_python37_app]
-from flask import Flask
-
+import os
+import glob
+from flask import Flask, render_template
+from forms import HoleForm
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
+
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
+
+
+# Use this code snipped because flask caches static files
+# returns the last update timestamp for js folder (can specify dir or file in this method)
+# credit @marredcheese response
+# https://stackoverflow.com/questions/41144565/flask-does-not-see-change-in-js-file/41150548
+# and also here
+# https://www.kite.com/python/answers/how-to-get-the-last-modified-time-of-a-file-in-python#:~:text=Use os.,get the last modified time&text=getmtime(path) to find the,point at which time starts).
+# and finally here
+# https://stackoverflow.com/questions/39327032/how-to-get-the-latest-file-in-a-folder-using-python
+my_path = os.path.abspath(os.path.dirname(__file__))
+folder = os.path.join(my_path, 'static/js/*')
+list_of_files = glob.glob(folder)
+latest_file = max(list_of_files, key=os.path.getmtime)
+last_updated = os.path.getmtime(latest_file)
 
 
 @app.route('/')
-def hello():
-    """Return a friendly HTTP greeting."""
-    return 'Hello World!'
+def home():
+
+    form = HoleForm()
+    return render_template('index.html', form=form, last_updated=last_updated)
 
 
 if __name__ == '__main__':

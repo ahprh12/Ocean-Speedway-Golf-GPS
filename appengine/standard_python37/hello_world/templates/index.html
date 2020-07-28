@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<title>Ocean Speedway</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+  background-image: url('/static/takeaway.JPG');
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+</style>
+<body>
+<div id = "main" class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+    <div class="w3-display-topleft w3-padding-large w3-xlarge">
+    <a href = "mailto:ahpatel9@icloud.com">info</a>
+    </div>
+    <div class="w3-display-topright w3-padding-large w3-medium">
+    </div>
+  <div class="w3-display-bottomleft w3-padding-large w3-large">
+    <p id="my_loc">Hey buddy don't say no!</p>
+  </div>
+  <div class="w3-display-middle">
+    <h1 id="yards" class="w3-xxlarge w3-animate-top" style="text-align:center">Giddyup!</h1>
+    <hr class="w3-border-grey" style="margin:auto;width:40%">
+    <p class="w3-large w3-center">"The Beach!" - Kramer</p>
+
+    <form id = "form" onsubmit="getYardage();return false;">
+         <fieldset>
+            <div style = font-size:15px; font-weight:bold; margin-left:150px;>
+               
+               {{ form.courses.label }}
+               {{ form.courses }}
+               <br>
+               {{ form.holes.label }}
+               {{ form.holes }}
+               <br><br>
+               {{ form.submit }}
+            </div>
+         </fieldset>
+      </form>
+  </div>
+  <div class="w3-display-bottomleft w3-padding-large">
+  </div>
+</div>
+<script src="/static/js/greens.js?u={{ last_updated }}"></script>
+<script src="/static/js/main.js?u={{ last_updated }}"></script>
+</body>
+</html>
