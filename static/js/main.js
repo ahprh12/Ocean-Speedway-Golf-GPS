@@ -1,4 +1,4 @@
-// Last updated 7.27.20 - ap9
+// DOES THIS WORK Last updated 7.27.20 - ap9
 
 // Initialize - get location
 var currentLat = 0.0;
@@ -24,38 +24,33 @@ function getYardage() {
     var lat = coordinates[key].lat;
     var lon = coordinates[key].lon;
 
+    var yardage = 0;
+
+    var bailey = [
+        '<img src=\"/static/baileyR.png\" width=\"130px\" height=\"130px\">',
+        '<img src=\"/static/baileyD.png\" width=\"130px\" height=\"130px\">',
+        '<img src=\"/static/baileyL.png\" width=\"130px\" height=\"130px\">',
+        '<img src=\"/static/bailey.png\" width=\"130px\" height=\"130px\">'
+        ];
+
     var ctr = 5; // 5 seconds
 
     var x = setInterval(function() {
 
         ctr--;
 
-        if (accuracy > 10.0) {
-
-            getLocation();
-            yd.innerHTML = "T-" + ctr;
-
-        } else {
-
-            getLocation();
-            clearInterval(x);
-
-            var yardage = getDistanceFromLatLonInYd(currentLat, currentLon, lat, lon);
-            yd.innerHTML = Math.round(yardage) + " yds";
-
-            kramer();
-            accuracy = 100.0; // important! reset accuracy otherwise getLocation never gets called again
-        }
+        getLocation();
+        yd.innerHTML = bailey[ctr-1];
         
         if (ctr == 0) {
 
-            clearInterval(x);
             getLocation();
+            clearInterval(x);
 
-            var yardage = getDistanceFromLatLonInYd(currentLat, currentLon, lat, lon);
-            yd.innerHTML = Math.round(yardage) + " yds";
+            yardage = getDistanceFromLatLonInYd(currentLat, currentLon, lat, lon);
+            yd.innerHTML = Math.round(yardage);
 
-            accuracy = 100.0;
+            accuracy = 100.0; // important! reset accuracy otherwise getLocation never gets called again
             kramer();
         }
     }, 1000);
@@ -95,7 +90,7 @@ function showPosition(position) {
 
     // LP1 testing approach shot coordinates 33.069564, -97.000803
 
-    myLoc.innerHTML = now + " " + currentLat.toFixed(2) + "," + currentLon.toFixed(2) + " (-+" + Math.round(accuracy) + "yds)" ;
+    myLoc.innerHTML = now + " " + currentLat.toFixed(2) + "," + currentLon.toFixed(2);
 }
 
 // getLocation error handler
