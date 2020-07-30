@@ -1,4 +1,4 @@
-# Ocean Speedway Golf GPS Web App
+# Kramerica Golf GPS Web App
 A simple and straightforward golf gps web app built on python flask and javascript for your everyday amateur golfer and developer.
 
 Why not use something way more simpler?
@@ -17,6 +17,10 @@ Why not use something way more simpler?
 Quickstart Deployment - replace google's repo with this one
 
 https://cloud.google.com/appengine/docs/standard/python3/quickstart
+
+See a running version here
+
+kramericagolf.us
 
 Suggestions welcome, AP.
 
