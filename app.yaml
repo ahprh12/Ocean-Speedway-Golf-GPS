@@ -1,4 +1,6 @@
 runtime: python37
 default_expiration: "1m"
-
-
+handlers:
+- url: /.*
+  script: auto
+  secure: always
