@@ -20,7 +20,7 @@ https://cloud.google.com/appengine/docs/standard/python3/quickstart
 
 See a running version here
 
-https://kramericagolf.us/
+https://ocnspdwy9.uc.r.appspot.com/
 
 Suggestions welcome, AP.
 
