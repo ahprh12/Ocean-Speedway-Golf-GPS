@@ -51,7 +51,7 @@ function getYardage() {
             yd.innerHTML = Math.round(yardage);
 
             accuracy = 100.0; // important! reset accuracy otherwise getLocation never gets called again
-            kramer();
+            //kramer();
         }
     }, 1000);
 }
