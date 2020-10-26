@@ -1,4 +1,4 @@
-# Kramerica Golf GPS Web App
+# Ocean Speedway Golf GPS Web App
 A simple and straightforward golf gps web app built on python flask and javascript for your everyday amateur golfer and developer.
 
 Why not use something way more simpler?
