@@ -1,58 +1,88 @@
-// DOES THIS WORK Last updated 7.27.20 - ap9
+// DOES THIS WORK Last updated 10.26.20 - ap9
 
 // Initialize - get location
 var currentLat = 0.0;
 var currentLon = 0.0;
+// Initialize Last Shot location (for displaying driving distance)
+var previousLat = 0.0;
+var previousLon = 0.0;
+var yardsFromLastShot = 0;
 // don't set default to 0, look in getYardage logic
 var accuracy = 100.0;
 
 var myLoc = document.getElementById("my_loc");
 var yd = document.getElementById("yards");
+var stamp = document.getElementById("now");
 
-// Call first to set the stage - will call error if there is one.
-getLocation();
+var course = "";
+var hole = "";
+var key = "";
+var lat = 0.0;
+var lon = 0.0;
+var yardage = 0;
+var loc_id = 0;
+var now = "";
 
 // Look at this for ajax backend processing https://medium.com/@doobeh/posting-a-wtform-via-ajax-with-flask-b977782edeee
-
 function getYardage() {
 
-    var course = document.getElementById("courses").value;
-    var hole = document.getElementById("holes").value;
+    accuracy = 100.0;
 
-    var key = course + "" + hole;
-
-    var lat = coordinates[key].lat;
-    var lon = coordinates[key].lon;
-
-    var yardage = 0;
-
-    var bailey = [
-        '<img src=\"/static/baileyR.png\" width=\"130px\" height=\"130px\">',
-        '<img src=\"/static/baileyD.png\" width=\"130px\" height=\"130px\">',
-        '<img src=\"/static/baileyL.png\" width=\"130px\" height=\"130px\">',
-        '<img src=\"/static/bailey.png\" width=\"130px\" height=\"130px\">'
-        ];
-
-    var ctr = 5; // 5 seconds
-
+    course = document.getElementById("courses").value;
+    hole = document.getElementById("holes").value;
+    key = course + "" + hole;
+    lat = coordinates[key].lat;
+    lon = coordinates[key].lon;
+    yardage = 0;
+    var prvlat = 0.0;
+    var prvlon = 0.0;
+    var index = 0;
+    
+    var ctr = 0; // 5 seconds
+    
     var x = setInterval(function() {
 
-        ctr--;
-
         getLocation();
-        yd.innerHTML = bailey[ctr-1];
+
+        ctr++;
+        index = ctr % 3;
+
+        switch(index) {
+
+            case 1:
+                yd.innerHTML = "Loading.";
+                myLoc.innerHTML = "Zeroing In." + accuracy + "";
+                break;
+            case 2:
+                yd.innerHTML = "Loading..";
+                myLoc.innerHTML = "Zeroing In.." + accuracy + "";
+                break;
+            default:
+                yd.innerHTML = "Loading...";
+                myLoc.innerHTML = "Zeroing In..." + accuracy + "";
+                break;
+        }
         
-        if (ctr == 0) {
+        
+        if (accuracy < 11.0) {
 
-            getLocation();
             clearInterval(x);
-
+            navigator.geolocation.clearWatch(loc_id);
+            
             yardage = getDistanceFromLatLonInYd(currentLat, currentLon, lat, lon);
             yd.innerHTML = Math.round(yardage);
+            stamp.innerHTML = now + stamp.innerHTML;
 
-            accuracy = 100.0; // important! reset accuracy otherwise getLocation never gets called again
-            //kramer();
+            
+            if (previousLat != 0.0)
+                yardsFromLastShot = getDistanceFromLatLonInYd(currentLat, currentLon, previousLat, previousLon);
+
+            myLoc.innerHTML = "Last shot: " + Math.round(yardsFromLastShot) +  " yds (-+" + accuracy + ")";
+
+            previousLat = currentLat;
+            previousLon = currentLon;
         }
+
     }, 1000);
 }
 
@@ -62,7 +92,8 @@ function getLocation() {
     if (navigator.geolocation) {
 
         var options = {maximumAge:0,enableHighAccuracy: true};
-        navigator.geolocation.getCurrentPosition(showPosition,errorHandler,options);
+
+        loc_id = navigator.geolocation.watchPosition(showPosition,errorHandler,options); // loc_id = watchPos
 
     } else {
 
@@ -77,20 +108,16 @@ function showPosition(position) {
     var today = new Date();
     var hour = today.getHours();
     var minutes = addZero(today.getMinutes());
-    var now = (hour) + ":" + minutes + "PM";
+    now = (hour) + ":" + minutes + "PM";
 
     if (hour > 12)
         now = (hour-12) + ":" + minutes + "PM";
     else if (hour != 12) 
         now = hour + ":" + minutes + "AM";
 
+    accuracy = Math.round(position.coords.accuracy); // accuracy is in metres - 1.09ish yd/metre
     currentLat = position.coords.latitude;
     currentLon = position.coords.longitude;
-    accuracy = Math.round(position.coords.accuracy * 1.09361);
-
-    // LP1 testing approach shot coordinates 33.069564, -97.000803
-
-    myLoc.innerHTML = now + " " + currentLat.toFixed(2) + "," + currentLon.toFixed(2);
 }
 
 // getLocation error handler
@@ -102,7 +129,8 @@ function errorHandler(err) {
             alert("GPS timeout error. Try again in a minute.");
             break;
         case err.POSITION_UNAVAILABLE:
-            alert("Location is not available due to device GPS error, try again later. Please report to info link above.");
+            // This error may be misleading when in airplane mode. GPS still works.
+            //alert("Location is not available due to device GPS error, try again later. Please report to info link above.");
             break;
         case err.PERMISSION_DENIED:
             alert("Your browser has location services disabled. Allow location services for your browser in your device settings, then refresh page.");
@@ -110,18 +138,6 @@ function errorHandler(err) {
         default:
             alert("An unknown error occurred. Please report to info link above.");
     }
-}
-
-function sleep(milliseconds) {
-    
-    const date = Date.now();
-    let currentDate = null;
-    
-    do {
-        
-        currentDate = Date.now();
-        
-    } while (currentDate - date < milliseconds);
 }
 
 // Credit - https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
@@ -150,25 +166,6 @@ function getDistanceFromLatLonInYd(lat1, lon1, lat2, lon2) {
 function deg2rad(deg) {
 
   return deg * (Math.PI/180)
-  
-}
-
-// fun stuff B-)
-function kramer() {
-
-    var rando = Math.floor(Math.random() * 3) + 1;
-    var x = document.getElementById("main");
-
-    switch(rando) {
-        case 1:
-            x.style.backgroundImage = "url('/static/takeaway.JPG')";
-            break;
-        case 2:
-            x.style.backgroundImage = "url('/static/follow.JPG')";
-            break;
-        default:
-            x.style.backgroundImage = "url('/static/surprise.JPG')";
-    }
 }
 
 // see getMinutes
@@ -177,8 +174,12 @@ function addZero(i) {
   if (i < 10) {
 
     i = "0" + i;
-
   }
-
   return i;
 }
+
+$('#next').click(function(event) {
+
+    $('#holes option:selected').next().attr('selected', 'selected');  
+    event.preventDefault();
+});

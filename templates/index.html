@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>Kramerica Golf GPS</title>
+<title>Your Goto Golf GPS</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
@@ -10,44 +10,55 @@
 body,h1 {font-family: "Raleway", sans-serif}
 body, html {height: 100%}
 .bgimg {
-  background-image: url('/static/golfocean.png');
+  background-image: url('/static/images/stewart.jpg');
   min-height: 100%;
   background-position: center;
   background-size: cover;
 }
-
+.button {
+    position: absolute;
+    top: 50%;
+}
+.wrapper {
+    text-align: center;
+}
+fieldset {
+    border: none;
+    padding-top: 0.15em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+}
 </style>
 <body>
 <div id = "main" class="bgimg w3-display-container w3-animate-opacity w3-text-white">
     <div class="w3-display-topleft w3-padding-large w3-xlarge">
-    <a href = "mailto:ahpatel9@icloud.com"><strong>info</strong></a>
+        <a href="mailto:ahpatel9@icloud.com">
+            <img src="/static/images/bailey.png" width="50px" height="50px">
+        </a>
     </div>
-    <div class="w3-display-topright w3-padding-large w3-medium">
+    <div class="w3-display-topright w3-padding-large w3-large">
+        <p id="now" style=font-weight:bold;>AP9 presents...</p>
     </div>
   <div class="w3-display-bottomleft w3-padding-large w3-large">
-    <p id="my_loc">GPS Coordinates will appear here.</p>
+    <p style=font-weight:bold; id="my_loc">Info will appear here.</p>
   </div>
   <div class="w3-display-middle">
     <h1 id="yards" class="w3-jumbo w3-animate-top" style="text-align:center">Giddyup!</h1>
-    <hr class="w3-border-grey" style="margin:auto;width:40%">
-    <p class="w3-large w3-center"></p>
-
+    <hr class="w3-border-white" style="margin:auto;width:50%">
+    <br>
     <form id = "form" onsubmit="getYardage();return false;">
          <fieldset>
-            <div style = font-size:15px; font-weight:bold; margin-left:150px;>
+            <div style= font-size:20px; font-weight:bold; margin-left:150px; class="wrapper">
                
-               {{ form.courses.label }}
                {{ form.courses }}
-               <br>
-               {{ form.holes.label }}
                {{ form.holes }}
+               <br><br>
+               <button id="next">Next Hole</button>
                <br><br>
                {{ form.submit }}
             </div>
          </fieldset>
       </form>
-  </div>
-  <div class="w3-display-bottomleft w3-padding-large">
   </div>
 </div>
 <script src="/static/js/greens.js?u={{ last_updated }}"></script>
