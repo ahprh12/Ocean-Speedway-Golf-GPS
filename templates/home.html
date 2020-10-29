@@ -6,23 +6,28 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <style>
-body, html {
+body, h1, html {
   height: 100%;
   font-family: "Raleway", sans-serif;
 }
-
 .bgimg {
   background-position: center;
   background-size: cover;
   background-image: url('/static/images/golfocean.png');
   min-height: 75%;
 }
-
 .menu {
   display: none;
 }
 </style>
 <body>
+
+<div class="bgimg w3-display-container w3-animate-opacity w3-sepia-min w3-text-sand">
+    <div class="w3-display-middle">
+        <h1 class="w3-xlarge w3-animate-top">Golf Ocean</h1>
+        <hr class="w3-border-sand" style="margin:auto;width:40%">
+    </div>
+</div>
 
 <!-- Hamburger Menu (hidden by default) -->
 <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
@@ -36,15 +41,12 @@ body, html {
   <a href="mailto:ahpatel9@icloud.com" onclick="w3_close()" class="w3-bar-item w3-button">Say Hi</a>
 </nav>
 
-
-<!-- Header with image -->
-<header class="bgimg w3-display-container w3-sepia-min w3-text-sand" id="home">
-  <div class="w3-display-middle">
-    <h1 class="w3-jumbo w3-animate-top">Golf Ocean</h1>
-    <hr class="w3-border-grey" style="margin:auto;width:40%">
-    <p class="w3-large w3-center">by Fran The Cat</p>
+<!-- Hamburger menu -->
+<div class="w3-top">
+  <div class="w3-transparent w3-xlarge" style="max-width:1200px;margin:auto">
+    <div class="w3-button w3-text-sand w3-padding-10 w3-left" onclick="w3_open()">☰</div>
   </div>
-</header>
+</div>
 
 <!-- Add a background color and large text to the whole page -->
 <div class="w3-deep-purple w3-sepia w3-large">
@@ -54,7 +56,7 @@ body, html {
   <div class="w3-content" style="max-width:700px">
     <img src="/static/images/catnap.JPG" style="width:100%;max-width:1000px" class="w3-margin-top">
 
-    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">meow.</span></h5>
+    <p>meow.</p>
     <p>my name is fran and i am a the cat. as you can see, i'm well read and have a diverse stock portfolio. i currently live with a doofus who thinks my name is miss marbles. i spend most of my time napping or destroying premium qualtity titleist golf balls. let's be real, titleist golf balls spend most of their time at the bottom of lakes, i'm doing them a favor. i also enjoy watching the patriots lose. say hi, i love hearing from my frans. i mean fans.</p>
 
     <img src="/static/images/catpat.JPG" style="width:100%;max-width:1000px" class="w3-margin-top">
@@ -65,7 +67,7 @@ body, html {
 </div>
 
 <!-- Footer -->
-<footer class="w3-center w3-light-grey w3-padding-48 w3-large">
+<footer class="w3-center w3-light-grey w3-padding-30 w3-large">
   <p>if there were anything important to put all the way down here then it wouldnt be all the way down here now would it? daphod.</p>
 </footer>
 
