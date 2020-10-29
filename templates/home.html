@@ -24,29 +24,18 @@ body, html {
 </style>
 <body>
 
-<!-- Links (sit on top) -->
-<div class="w3-top">
-  <div class="w3-row w3-padding w3-transparent w3-sepia w3-text-sand">
-    <div class="w3-col s2">
-      <a href="#" class="w3-button w3-block w3-transparent">HOME</a>
-    </div>
-    <div class="w3-col s2">
-      <a href="/gps" class="w3-button w3-block w3-transparent">GPS</a>
-    </div>
-    <div class="w3-col s2">
-      <a href="#" class="w3-button w3-block w3-transparent">NFL</a>
-    </div>
-    <div class="w3-col s2">
-      <a href="#" class="w3-button w3-block w3-transparent">New</a>
-    </div>
-    <div class="w3-col s2">
-      <a href="#" class="w3-button w3-block w3-transparent">CatRant</a>
-    </div>
-    <div class="w3-col s2">
-      <a href="mailto:ahpatel9@icloud.com" class="w3-button w3-block w3-transparent">Say Hi</a>
-    </div>
-  </div>
-</div>
+<!-- Hamburger Menu (hidden by default) -->
+<nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()"
+  class="w3-bar-item w3-button">Close Menu</a>
+  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button">Home</a>
+  <a href="/gps" onclick="w3_close()" class="w3-bar-item w3-button">GPS</a>
+  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button">NFL</a>
+  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button">Coming Soon</a>
+  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button">Cat Rants</a>
+  <a href="mailto:ahpatel9@icloud.com" onclick="w3_close()" class="w3-bar-item w3-button">Say Hi</a>
+</nav>
+
 
 <!-- Header with image -->
 <header class="bgimg w3-display-container w3-sepia-min w3-text-sand" id="home">
@@ -79,6 +68,17 @@ body, html {
 <footer class="w3-center w3-light-grey w3-padding-48 w3-large">
   <p>if there were anything important to put all the way down here then it wouldnt be all the way down here now would it? daphod.</p>
 </footer>
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+}
+ 
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+}
+</script>
 
 </body>
 </html>
