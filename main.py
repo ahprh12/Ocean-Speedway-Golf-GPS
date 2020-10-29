@@ -26,8 +26,13 @@ latest_file = max(list_of_files, key=os.path.getmtime)
 last_updated = os.path.getmtime(latest_file)
 
 
-@app.route('/gps')
+@app.route('/')
 def home():
+
+    return render_template('home.html')
+
+@app.route('/gps')
+def gps():
 
     form = HoleForm()
     return render_template('index.html', form=form, last_updated=last_updated)
