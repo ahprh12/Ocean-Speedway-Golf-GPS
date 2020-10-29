@@ -11,7 +11,7 @@ import NFLScores as nfl
 app = Flask(__name__, static_url_path='/static')
 
 try:
-    mongo_uri = os.environ['MONGODB_URI']
+    mongo_uri = "mongodb://127.0.0.1:27017"
 except KeyError:
     from secrets import mongoURI
     mongo_uri = mongoURI
