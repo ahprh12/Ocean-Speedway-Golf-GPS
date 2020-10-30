@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>
         {% if title: %}
             {{ title }} - NFLScores
@@ -11,10 +14,13 @@
             NFLScores
         {% endif %}
     </title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+	<div class="w3-display-topleft w3-padding-large w3-xlarge">
+        <a href="/">
+            <img src="/static/images/bailey.png" width="50px" height="50px">
+        </a>
+    </div>
     {% block content %}
     {% endblock %}
 </body>
