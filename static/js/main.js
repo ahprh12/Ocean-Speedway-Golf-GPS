@@ -71,7 +71,7 @@ function getYardage() {
             
             yardage = getDistanceFromLatLonInYd(currentLat, currentLon, lat, lon);
             yd.innerHTML = Math.round(yardage);
-            stamp.innerHTML = now + stamp.innerHTML;
+            stamp.innerHTML = now;
 
             
             if (previousLat != 0.0)
