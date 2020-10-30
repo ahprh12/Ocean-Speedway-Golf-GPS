@@ -3,6 +3,7 @@ import re
 import glob
 
 from flask import Flask, jsonify, request, render_template, redirect
+from forms import HoleForm
 from pymongo import MongoClient
 import NFLScores as nfl
 
