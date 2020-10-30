@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>
         {% if title: %}
-            {{ title }} - NFLScores adapted from <a href="https://github.com/SuperRonJon">Patrick Seute</a>
+            {{ title }} - NFLScores
         {% else: %}
-            NFLScores adapted from <a href="https://github.com/SuperRonJon">Patrick Seute</a>
+            NFLScores
         {% endif %}
     </title>
 </head>
@@ -19,6 +19,11 @@
 	<div class="w3-display-topleft w3-padding-large w3-xlarge">
         <a href="/">
             <img src="/static/images/bailey.png" width="50px" height="50px">
+        </a>
+    </div>
+    <div class="w3-display-topright w3-padding-large w3-xlarge">
+        <a href="/">
+            <a href="https://github.com/SuperRonJon">adptd frm</a>
         </a>
     </div>
     {% block content %}
