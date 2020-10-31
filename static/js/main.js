@@ -27,6 +27,9 @@ var now = "";
 function fireoff() {
 
     for (var x = 1; x < 8; x++) getYardage(x);
+
+    previousLat = currentLat;
+    previousLon = currentLon;
 }
 
 // Look at this for ajax backend processing https://medium.com/@doobeh/posting-a-wtform-via-ajax-with-flask-b977782edeee
@@ -40,8 +43,6 @@ function getYardage() {
     lat = coordinates[key].lat;
     lon = coordinates[key].lon;
     yardage = 0;
-    var prvlat = 0.0;
-    var prvlon = 0.0;
     var index = 0;
     
     var ctr = 0; // 5 seconds
@@ -84,9 +85,6 @@ function getYardage() {
                 yardsFromLastShot = getDistanceFromLatLonInYd(currentLat, currentLon, previousLat, previousLon);
 
             myLoc.innerHTML = "Last shot: " + Math.round(yardsFromLastShot) +  " yds (-+" + accuracy + ")";
-
-            previousLat = currentLat;
-            previousLon = currentLon;
         }
 
     }, 1000);
