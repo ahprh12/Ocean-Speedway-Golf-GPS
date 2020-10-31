@@ -201,7 +201,6 @@ input[type="reset"]:focus,
 input[type="button"]:focus {
   color: #fdf5e6;
   border-color: #888;
-  background-color: transparent;
   outline: 0; }
 .button.button-primary,
 button.button-primary,

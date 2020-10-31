@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="container">
-        <h1>NFLScores</h1>
-        <form action="/week" method="GET">
-            <div class="row">
-                <div class="six columns">
-                    <label>Year</label>
-                    <select class="u-full-width" name="year" id="year" required>
+    <div class="center w3-display-middle">
+        <h1><a target="_blank" rel="noopener noreferrer" href="https://github.com/SuperRonJon">nflscaws</a></h1>
+            <form action="/week" method="GET">
+                    <select name="year" id="year" required="">
+                        <option value="2020">--Year--</option>
                         <option value="2020">2020</option>
                         <option value="2019">2019</option>
                         <option value="2018">2018</option>
@@ -27,10 +25,9 @@
                         <option value="2003">2003</option>
                         <option value="2002">2002</option>
                     </select>
-                </div>
-                <div class="six columns">
-                    <label>Week</label>
-                    <select class="u-full-width" id="week" name="week" required>
+               
+                    <select id="week" name="week" required="">
+                        <option value="1">--Week--</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -48,9 +45,7 @@
                         <option value="15">15</option>
                         <option value="16">16</option>
                     </select>
-                </div>
-            </div>
-            <button class="button-primary">Submit</button>
-        </form>
+                <button class="button-primary">Submit</button>
+            </form>
     </div>
 {% endblock %}
