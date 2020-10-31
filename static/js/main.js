@@ -23,6 +23,12 @@ var yardage = 0;
 var loc_id = 0;
 var now = "";
 
+// crappy solution to try and get the most accurate yardage :| the equivalent of clicking 7 times
+function fireoff() {
+
+    for (var x = 1; x < 8; x++) getYardage(x);
+}
+
 // Look at this for ajax backend processing https://medium.com/@doobeh/posting-a-wtform-via-ajax-with-flask-b977782edeee
 function getYardage() {
 
@@ -50,15 +56,15 @@ function getYardage() {
         switch(index) {
 
             case 1:
-                yd.innerHTML = "Loading.";
+                yd.innerHTML = "spazzing.";
                 myLoc.innerHTML = "Zeroing In." + accuracy + "";
                 break;
             case 2:
-                yd.innerHTML = "Loading..";
+                yd.innerHTML = "spazzing..";
                 myLoc.innerHTML = "Zeroing In.." + accuracy + "";
                 break;
             default:
-                yd.innerHTML = "Loading...";
+                yd.innerHTML = "spazzing...";
                 myLoc.innerHTML = "Zeroing In..." + accuracy + "";
                 break;
         }
