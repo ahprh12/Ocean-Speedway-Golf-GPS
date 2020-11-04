@@ -2,15 +2,21 @@
 {% block content %}
 <div class='container'>
     <h1 class='center'>{{ title }}</h1>
-    <h2 class='center'>{{ game['info']['team1_score'] }} - {{ game['info']['team2_score'] }}</h2>
+    <h2 class='center'>{{ game['info']['team1_score'] }} - {{ game['info']['team2_score'] }} - {{ game['info']['status'] }}</h2>
+        <p class='center'>{{ game['info']['boxscore'] | safe }}</p>
+    <br>
+    <div class='center'>
+        <form action="/update_match/{{ game['game_id'] }}" method="post">
+            <button class="button">Update Plays</button>
+        </form>
+    </div>
+
     <ul class='center'>
         {% for play in game['scores']: %}
-            <li>{{ play }}</li>
+            <br>
+            <img src={{ play['logo'] }} width="18px" height="18px">    {{ play['type'] }} - {{ play['headline'] }} - {{ play['score'] }}
+            <br>
         {% endfor %}
     </ul>
-    <a href="/" class='button button-primary'>Search Again</a>
-    <form action="/update_match/{{ game['game_id'] }}" method="post">
-        <button class="button">Update Plays</button>
-    </form>
 </div>
 {% endblock %}
