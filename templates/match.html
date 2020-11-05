@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <div class='container'>
-    <h1 class='center'>{{ title }}</h1>
-    <h2 class='center'>{{ game['info']['team1_score'] }} - {{ game['info']['team2_score'] }} - {{ game['info']['status'] }}</h2>
+    <br>
+    <br>
+    <br>
+    <h3 class='center'>{{ title }}</h3>
+    <h4 class='center'>{{ game['info']['team1_score'] }} - {{ game['info']['team2_score'] }} - {{ game['info']['status'] }}</h4>
         <p class='center'>{{ game['info']['boxscore'] | safe }}</p>
     <br>
     <div class='center'>
