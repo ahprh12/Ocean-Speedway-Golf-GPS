@@ -83,7 +83,7 @@ def get_match_info(gameId):
     return_data['status'] =  status
     return_data['boxscore'] = ''
 
-    if status.lower() == 'final':
+    if status.lower() != '':
 
         boxscore = page_soup.find(lambda tag: tag.name=='table' and tag.has_attr('id') and tag['id']=='linescore')
         boxscoreHeader = boxscore.findAll(lambda tag: tag.name=='th')
