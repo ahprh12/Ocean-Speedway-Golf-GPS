@@ -9,6 +9,7 @@ NFL Scaws code adapated by https://github.com/SuperRonJon
 from flask import Flask, jsonify, request, render_template, redirect
 from forms import HoleForm
 import NFLScores as nfl
+import utsa
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
@@ -37,6 +38,12 @@ last_updated = os.path.getmtime(latest_file)
 def home():
 
     return render_template('home.html')
+
+@app.route('/utsa')
+def selfscout():
+
+    return render_template('utsa.html',  tables=[utsa.mer.to_html(classes='data', header='true', index=False)])
+
 
 @app.route('/gps')
 def gps():
