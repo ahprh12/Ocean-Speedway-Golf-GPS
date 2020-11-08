@@ -42,7 +42,9 @@ def home():
 @app.route('/utsa')
 def selfscout():
 
-    return render_template('utsa.html',  tables=[utsa.mer.to_html(classes='data', header='true', index=False)])
+	full = utsa.combineDF()
+
+	return render_template('utsa.html',  tables=[full.to_html(classes='data', header='true', index=False)])
 
 
 @app.route('/gps')

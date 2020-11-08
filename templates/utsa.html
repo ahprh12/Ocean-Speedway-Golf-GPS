@@ -13,6 +13,7 @@
     </script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.datatables.net/plug-ins/1.10.12/api/sum().js"></script>
     <script src="/static/js/utsa.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='utsa.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -22,7 +23,7 @@
 <body>
     <div class="w3-display-topleft w3-padding-large w3-xlarge">
         <a href="/utsa">
-            <img src="/static/images/rr.png" width="100px" height="100px">
+            <img src="/static/images/rr.png" width="100px" height="60px">
         </a>
     </div>
     <div class="w3-display-topright w3-padding-large w3-xlarge">
@@ -34,7 +35,7 @@
     <br>
     <div class='container'>
         <h3 class='center'>Self Scout</h3>
-        <h4 class='center'>Table info goes here...</h4>
+        <h4 class='center'>* * *</h4>
             {% for table in tables %}
                 {{ table|safe }}
             {% endfor %}
