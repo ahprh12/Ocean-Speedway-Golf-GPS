@@ -5,17 +5,8 @@
 from .match_parsing import get_week_info, get_match_info, get_match_scores
 
 import os
-from pymongo import MongoClient
 
-try:
-    mongo_uri = "mongodb://nfls_user:kawboy@localhost:27017/nfls"
-except KeyError:
-    from secrets import mongoURI
-    mongo_uri = mongoURI
-
-client = MongoClient(mongo_uri)
-db = client.nfls
-
+from .nflsDBconnect import db
 
 def getnflweek(week, year):
   
