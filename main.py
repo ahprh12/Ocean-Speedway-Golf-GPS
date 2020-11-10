@@ -42,9 +42,10 @@ def home():
 @app.route('/utsa')
 def selfscout():
 
-	full = utsa.combineDF()
+    overall = utsa.getRP()
+    total = utsa.summaryTable()
 
-	return render_template('utsa.html',  tables=[full.to_html(classes='data', header='true', index=False)])
+    return render_template('utsa.html',  tables=[total.to_html(classes='data', header='true', index=False), overall.to_html(classes='data', header='true', index=False)])
 
 
 @app.route('/gps')
@@ -76,11 +77,9 @@ def week_matches():
 
 @app.route('/update_week/<year>/<week>', methods=['POST'])
 def update_week(year, week):
-    query = {'year': year, 'week': week}
-    db.weekdata.delete_many(query)
+    
+    nfl.liveWeekRefresh(year, week)
 
-    info = nfl.get_week_info(year, week)
-    db.weekdata.insert_one(info)
     return redirect("/week?year={}&week={}".format(year, week))
 
 

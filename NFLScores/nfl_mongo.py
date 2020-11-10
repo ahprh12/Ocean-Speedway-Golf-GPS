@@ -17,10 +17,24 @@ def getnflweek(week, year):
         db.weekdata.insert_one(info)
         games = info['games']
 
+        for game in games:
+
+            gm, tt = getmatch(game['id'])
+            btn = gm['info']['team1_score'] + " - " + gm['info']['team2_score'] + " - " + gm['info']['status']
+
+            game['button'] = btn
+
     else:
 
         week_data = db.weekdata.find(query, {'games': True})
         games = week_data[0]['games']
+
+        for game in games:
+
+            gm, tt = getmatch(game['id'])
+            btn = gm['info']['team1_score'] + " - " + gm['info']['team2_score'] + " - " + gm['info']['status']
+
+            game['button'] = btn
 
     return games
 
@@ -69,3 +83,17 @@ def updatematch(gameid):
 	except ValueError:
 		pass
 	db.gamedata.insert_one(game)
+
+
+def liveWeekRefresh(year, week):
+
+    query = {'year': year, 'week': week}
+    db.weekdata.delete_many(query)
+
+    info = get_week_info(year, week)
+
+    for gm in info['games']:
+
+        updatematch(gm['id'])
+
+    db.weekdata.insert_one(info)

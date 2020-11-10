@@ -35,11 +35,13 @@
     <br>
     <div class='container'>
         <h3 class='center'>Self Scout</h3>
-        <h4 class='center'>* * *</h4>
-            {% for table in tables %}
-                {{ table|safe }}
-            {% endfor %}
+        <h6 class='center'>Data file Upload and Game filter will go here...</h6>
         <br>
+        <h5 class='center'>Overall/Game Summary</h5>
+            {{ tables[0] | safe }}
+        <br>
+        <h5 class='center'>Overall/Game RP by Formation</h5>
+            {{ tables[1] | safe }}
     </div>
 </body>
 </html>

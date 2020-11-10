@@ -12,7 +12,7 @@
     </div>
     <div class="center">
         {% for game in games: %}
-            <br><a class="button button-primary" href="/match/{{ game['id'] }}">{{ game['short'] }}</a>
+            <br><a class="button button-primary" href="/match/{{ game['id'] }}">{{ game['short'] }} - {{ game['button'] }}</a>
         {% endfor %}
     </div>
 </div>

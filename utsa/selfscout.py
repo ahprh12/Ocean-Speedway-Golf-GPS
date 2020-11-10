@@ -4,66 +4,179 @@ import pandas as pd
 # Create reference to CSV file
 fpath = "utsa/Resources/selfscoutdata.xlsx"
 
+#pd.reset_option("all")
+#pd.set_option('precision', 0)
+
 # Import the CSV into a pandas DataFrame
 raw = pd.read_excel(fpath)
 
-def getOverallRP():
+raw["Name"]= raw["Name"].str.split(",", n = 1, expand = True)
+
+def addFormationSplit(df):
+
+	formations = {
+
+		'0 TRIPS':'EMPTY',
+		'9 LOUIE NASTY':'EMPTY',
+		'ACE':'2x2',
+		'ALL':'UNBALANCED',
+		'ALL KING':'UNBALANCED',
+		'ALPHA':'3x1',
+		'DEUCE':'2x2',
+		'DOUBLES':'2x2',
+		'DUO':'2x2',
+		'EMPTY':'EMPTY',
+		'EXIT':'EMPTY',
+		'FLIP TRIPS':'3x1',
+		'JOKER':'2x2',
+		'JOKER SQUEEZE':'2x2',
+		'KING':'3x1',
+		'LOUIE':'3x1',
+		'LOUIE FAR':'2x2',
+		'LOUIE KING':'2x2',
+		'LOUIE KING NASTY':'UNBALANCED',
+		'LOUIE QUEEN':'3x1',
+		'MINUTEMAN':'UNKNOWN',
+		'QUADS':'EMPTY',
+		'QUAKER':'UNKNOWN',
+		'QUEEN':'2x2',
+		'ROGER':'3x1',
+		'ROGER FAR':'2x2',
+		'ROGER KING':'3x1',
+		'ROGER KING NASTY':'UNKNOWN',
+		'ROGER QUEEN':'3x1',
+		'SAINTS':'UNKNOWN',
+		'SPLIT':'3x1',
+		'TREY':'3x1',
+		'TRIBE':'3x1',
+		'TRIO':'3x1',
+		'TRIPS':'3x1',
+		'TROOP':'3x1',
+		'TROY':'3x1',
+		'TURBO':'UNKNOWN',
+	}
+
+	df.insert(2, "SPLITS", "na")
+
+	for index, row in df.iterrows():
+
+	    df.loc[index,'SPLITS'] = formations[row['FORM']]
+
+	df = df[["FORM", "SPLITS", "R/P",]]
+
+	return df
+
+
+# Only do this once otherwise errors
+# call after function is declared above
+# otherwise function doesnt exist
+# i.e sequence matters
+df = addFormationSplit(raw)
+
+def getRP():
 
 	overallrp = raw[["FORM", "R/P",]]
 	run = overallrp.loc[overallrp["R/P"] == "R"]
 	rp = run.groupby(["FORM","R/P"])["R/P"].count().reset_index(name="R")
 
+
+	# %%
 	pas = overallrp.loc[overallrp["R/P"] == "P"]
 	pp = pas.groupby(["FORM","R/P"])["R/P"].count().reset_index(name="P")
 
+
+	# %%
 	mer = rp.merge(pp, on='FORM')
 	fin = mer[['FORM','R', 'P']]
 	fin = fin.set_index('FORM')
 	tt = fin.div(fin.sum(axis=1), axis=0)
 	mer = fin.merge(tt, on='FORM')
 	mer.rename(columns={'R_x': 'R', 'P_x': 'P', 'R_y': 'R%', 'P_y': 'P%'}, inplace=True)
-	pd.options.display.float_format = '{:,.0%}'.format
 	mer = mer.reset_index()
 
-	mer.insert(loc=0, column='Name', value="COMBINED")
 
-	return mer
+	# %%
+	#################### NEXT STEP #####################
+	overallrp1 = raw[["FORM", "R/P",]]
 
-# filter original raw df by game
-def getGameRP():
-
-	raw["Name"]= raw["Name"].str.split(",", n = 1, expand = True)
-	overallrp1 = raw[["Name", "FORM", "R/P",]]
-
-	run = overallrp1[["Name", "FORM", "R/P",]]
+	run = overallrp1[["FORM", "R/P",]]
 	run = run.loc[run["R/P"] == "R"]
-	run = run.groupby(["Name", "FORM","R/P"])["R/P"].count().reset_index(name="R")
+	run = run.groupby(["FORM","R/P"])["R/P"].count().reset_index(name="R")
 
+
+	# %%
 	pas1 = overallrp1.loc[overallrp1["R/P"] == "P"]
-	pas1 = pas1.groupby(["Name", "FORM","R/P"])["R/P"].count().reset_index(name="P")
+	pas1 = pas1.groupby(["FORM","R/P"])["R/P"].count().reset_index(name="P")
 
-	mer1 = run.merge(pas1, on=['Name','FORM'])
-	fin1 = mer1[['Name','FORM','R', 'P']]
-	fin1 = fin1.set_index(['Name','FORM'])
-	tt1 = fin1.div(fin1.sum(axis=1), axis=0)
-	mer1 = fin1.merge(tt1, on=['Name', 'FORM'])
+
+	# %%
+	mer1 = run.merge(pas1, on=['FORM'], how='outer')
+	mer1.fillna(0,inplace=True)
+	fin1 = mer1[['FORM','R', 'P']]
+	fin1 = fin1.set_index(['FORM'])
+	tt1 = (fin1.div(fin1.sum(axis=1), axis=0)*100).round(0).astype(str) + '%'
+	mer1 = fin1.merge(tt1, on=['FORM'])
 	mer1.rename(columns={'R_x': 'R', 'P_x': 'P', 'R_y': 'R%', 'P_y': 'P%'}, inplace=True)
-	pd.options.display.float_format = '{:,.0%}'.format
+	#pd.options.display.float_format = '{:,.0%}'.format
 	mer1 = mer1.reset_index()
 
 	return mer1
 
 
-def combineDF():
+# summary table
+def summaryTable():
 
-	mer = getOverallRP()
-	mer1 = getGameRP()
+	pers = raw
+	run = raw.loc[raw["R/P"] == "R"]
+	rp = run.groupby(["FORM", "SPLITS"])["R/P"].count().reset_index(name="R")
 
-	result = pd.concat([mer, mer1])
+	pas = raw.loc[raw["R/P"] == "P"]
+	pp = pas.groupby(["FORM", "SPLITS"])["R/P"].count().reset_index(name="P")
 
-	return result
+	mer = rp.merge(pp, how='outer',on=["FORM","SPLITS"])
 
+	mer.fillna(0,inplace=True)
 
-# filter original raw df by down (w/ annd w/out formation) and conversion percentage
+	fin = mer[["FORM", "SPLITS", "R", "P"]]
+	fin = fin.set_index(["FORM", "SPLITS"])
 
-# use pass game df and do extended breakdown, may need more info
+	tt = (fin.div(fin.sum(axis=1,skipna = True), axis=0)*100).round(0).astype(str) + '%'
+	mer = fin.merge(tt, on=["FORM", "SPLITS"])
+
+	mer.rename(columns={'R_x': 'R', 'P_x': 'P', 'R_y': 'R%', 'P_y': 'P%'}, inplace=True)
+	mer = mer.reset_index()
+	mer.fillna(0,inplace=True)
+
+	sm = mer.groupby('SPLITS')['R','P'].sum()
+	rtot = sm['R'].sum()
+	ptot = sm['P'].sum()
+	sm = sm.reset_index()
+
+	df = pd.DataFrame({"SPLITS":['OVERALL'], "R":[rtot], "P":[ptot]}) 
+	df = df.reset_index()
+	mm = pd.concat([sm,df])
+	mm = mm[["SPLITS", "R", "P"]]
+
+	###### PERSONNEL BREAKDOWN ***********************************
+
+	run = pers[["OFF PERS","R/P",]]
+	run = run.loc[run["R/P"] == "R"]
+	run = run.groupby('OFF PERS')["R/P"].count().reset_index(name="R")
+
+	pas = pers[["OFF PERS","R/P",]]
+	pas = pas.loc[pas["R/P"] == "P"]
+	pas = pas.groupby('OFF PERS')["R/P"].count().reset_index(name="P")
+
+	pers = run.merge(pas,on="OFF PERS",how="outer")
+	pers.rename(columns={'OFF PERS': 'SPLITS'}, inplace=True)
+	pers.fillna(0,inplace=True)
+
+	total = pd.concat([pers,mm])
+
+	total = total.set_index(['SPLITS'])
+	cent = (total.div(total.sum(axis=1), axis=0)*100).round(0).astype(str) + '%'
+	total = total.merge(cent, on=['SPLITS'])
+	total.rename(columns={'R_x': 'R', 'P_x': 'P', 'R_y': 'R%', 'P_y': 'P%'}, inplace=True)
+	total = total.reset_index()
+
+	return total
