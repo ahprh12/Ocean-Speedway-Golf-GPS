@@ -1,12 +1,19 @@
 # Logic for mongo db NFL score lookups
 # Keep flask main.py clean and readable
+import os
+from pymongo import MongoClient
 
 # import beautiful soup stuff
 from .match_parsing import get_week_info, get_match_info, get_match_scores
 
-import os
+try:
+    mongo_uri = "mongodb+srv://nfls_user:kawboy@cluster0.3kay6.mongodb.net/nfls?retryWrites=true&w=majority"
+except KeyError:
+    from secrets import mongoURI
+    mongo_uri = mongoURI
 
-from .nflsDBconnect import db
+client = MongoClient(mongo_uri)
+db = client.nfls
 
 def getnflweek(week, year):
   

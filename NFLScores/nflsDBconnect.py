@@ -12,7 +12,7 @@ from pymongo import MongoClient
 #mongo_uri = "mongodb://nfls_user:kawboy@localhost:27017/nfls"
 
 try:
-    mongo_uri = "mongodb://nfls_user:kawboy@localhost:27017/nfls"
+    mongo_uri = "mongodb+srv://nfls_user:kawboy@cluster0.3kay6.mongodb.net/nfls?retryWrites=true&w=majority"
 except KeyError:
     from secrets import mongoURI
     mongo_uri = mongoURI
