@@ -12,6 +12,10 @@ raw = pd.read_excel(fpath)
 
 raw["Name"]= raw["Name"].str.split(",", n = 1, expand = True)
 
+# ADD TEAM FILTER OPTION HERE IF THERE IS ONE 
+#raw = raw.loc[raw["Name"] == "20 08 UTSA OFF VS FAU DEF (10/31/2020)"]
+# OTHERWISE WERE SHOWING OVERALL RP
+
 def addFormationSplit(df):
 
 	formations = {
@@ -179,4 +183,7 @@ def summaryTable():
 	total.rename(columns={'R_x': 'R', 'P_x': 'P', 'R_y': 'R%', 'P_y': 'P%'}, inplace=True)
 	total = total.reset_index()
 
-	return total
+	sumrp = rtot+ptot
+	totalrp = [round(rtot),round(ptot),round((rtot/sumrp)*100),round((ptot/sumrp)*100)]
+
+	return total, totalrp
