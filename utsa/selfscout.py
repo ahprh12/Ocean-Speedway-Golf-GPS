@@ -187,3 +187,84 @@ def summaryTable():
 	totalrp = [round(rtot),round(ptot),round((rtot/sumrp)*100),round((ptot/sumrp)*100)]
 
 	return total, totalrp
+
+
+def downs():
+
+	orp = raw[["FORM","Down","Distance","R/P",]]
+
+	# binning
+	cut_labels_5 = ['1', '2-3', '4-6', '7-10', '11+']
+	cut_bins = [0, 1, 3, 6, 10, 49]
+
+	orp['YD'] = pd.cut(orp['Distance'], bins=cut_bins, labels=cut_labels_5)
+	orp = orp[["FORM","Down","R/P","YD"]]
+
+	# grouping
+	run = orp.loc[orp["R/P"] == "R"]
+
+	run = run.groupby(["Down","YD"])["R/P"].count().reset_index(name="R")
+	pas = orp.loc[orp["R/P"] == "P"]
+
+	pas = pas.groupby(["Down","YD"])["R/P"].count().reset_index(name="P")
+
+	# initial merge
+	mer = run.merge(pas, on=["Down","YD"])
+
+	# compile overall downs table
+	fin = mer.set_index(["Down","YD"])
+	tt = (fin.div(fin.sum(axis=1), axis=0)*100).round(0).astype(str) + '%'
+	mer1 = fin.merge(tt, on=["Down","YD"])
+	mer1.rename(columns={'R_x': 'R', 'P_x': 'P', 'R_y': 'R%', 'P_y': 'P%'}, inplace=True)
+	mer1 = mer1.reset_index()
+
+	tdh = mer1.set_index(["Down","YD"])[['R','P','R%','P%']].T.apply(tuple).to_dict('dict')
+	downFormDict = downFormation(orp)
+
+	return tdh, downFormDict
+
+
+def downFormation(orp):
+
+	te = orp.loc[orp["R/P"] == "R"]
+
+	te = te.groupby(["Down","YD","FORM"])["R/P"].count().reset_index(name="R")
+	te = te[te['R'] > 0]
+
+	tp = orp.loc[orp["R/P"] == "P"]
+
+	tp = tp.groupby(["Down","YD","FORM"])["R/P"].count().reset_index(name="P")
+	tp = tp[tp['P'] > 0]
+
+	mr = te.merge(tp, on=["Down","YD","FORM"], how='outer')
+	mr["R"].fillna(0,inplace=True)
+	mr["P"].fillna(0,inplace=True)
+
+	fn = mr.set_index(["Down","YD","FORM"])
+	tt1 = (fn.div(fn.sum(axis=1), axis=0)*100).round(0).astype(str) + '%'
+	merf = fn.merge(tt1, on=["Down","YD","FORM"])
+	merf.rename(columns={'R_x': 'R', 'P_x': 'P', 'R_y': 'R%', 'P_y': 'P%'}, inplace=True)
+	merf = merf.reset_index()
+
+	mydict = merf.set_index(["Down","YD","FORM"])[['R','P','R%','P%']].T.apply(tuple).to_dict('dict')
+	newd = formatDict(mydict)
+
+	return newd
+
+def formatDict(d):
+
+	cats = ['1', '2-3', '4-6', '7-10', '11+']
+	newd = {}
+
+	for a in range(1,5):
+	    for cat in cats:
+	        newd[str(a)+"_"+cat] = list(partial_match((a, cat, None), d))
+
+	return newd
+
+
+def partial_match(key, d):
+
+    for k, v in d.items():
+        if all(k1 == k2 or k2 is None for k1, k2 in zip(k, key)):
+            yield k[2],v

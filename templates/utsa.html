@@ -39,9 +39,50 @@
         <br>
         <h5 class='center'>Summary - R: {{ summary[0] }} ({{ summary[2] }} %) - P: {{ summary[1] }} ({{ summary[3] }} %)</h5>
             {{ tables[0] | safe }}
+
         <br>
+
         <h5 class='center'>Overall/Game RP by Formation</h5>
             {{ tables[1] | safe }}
+
+        <br>
+
+        <h5 class='center'>Overall/Game RP by Down and Distance (Click row to see details)</h5>
+    <table id="downs" border="1" class="dataTable dataframe data">
+            <thead>
+            <tr style="text-align: right;">
+              <th>Down</th>
+              <th>Yd</th>
+              <th>R</th>
+              <th>P</th>
+              <th>R%</th>
+              <th>P%</th>
+            </tr>
+          </thead>
+        <tbody>
+            {% for d in down.keys() %}
+            <tr>
+                <td>{{ d[0] }}</td>
+                <td>{{ d[1] }}</td>
+                <td>{{ down[d]['R'] }}</td>
+                <td>{{ down[d]['P'] }}</td>
+                <td>{{ down[d]['R%'] }}</td>
+                <td>{{ down[d]['P%'] }}</td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                <p>(Click to Collapse)
+                    <br>
+                    {% for e in expand[(d[0] | string )+"_"+d[1]] %}
+                        <br>
+                        {{ e[0] }}
+                    {% endfor %}
+                </p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     </div>
 </body>
 </html>

@@ -1,6 +1,21 @@
 $(document).ready( function () {
 
-	$('table').DataTable({
+    $(function() {
+
+        $("td[colspan=6]").closest("tr").hide();
+        $("#downs").click(function(event) {
+            //console.log(event);
+            event.stopPropagation();
+            var $target = $(event.target);
+            if ( $target.closest("td").attr("colspan") > 1 ) {
+                $target.closest("tr").slideToggle();
+            } else {
+                $target.closest("tr").next().slideToggle();
+            }                    
+        });
+    });
+
+	$('table:not(#downs)').DataTable({
 
 
 		initComplete: function (settings, json) {
