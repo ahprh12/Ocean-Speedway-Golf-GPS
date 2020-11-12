@@ -46,7 +46,7 @@ def selfscout():
     total,summary = utsa.summaryTable()
     down, expand = utsa.downs()
 
-    return render_template('utsa.html', down=down,expand=expand,summary=summary, tables=[total.to_html(classes='data', header='true', index=False), overall.to_html(classes='data', header='true', index=False)])
+    return render_template('utsa.html', last_updated=last_updated, down=down,expand=expand,summary=summary, tables=[total.to_html(classes='data', header='true', index=False), overall.to_html(classes='data', header='true', index=False)])
 
 
 @app.route('/gps')

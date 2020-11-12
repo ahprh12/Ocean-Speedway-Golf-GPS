@@ -78,6 +78,37 @@ def getmatch(gameid):
     return game, title
 
 
+def getTeamSeason(week, year):
+  
+    query = {'week': week, 'year': year}
+
+    if db.weekdata.count_documents(query) == 0:
+        info = get_week_info(year, week)
+        db.weekdata.insert_one(info)
+        games = info['games']
+
+        for game in games:
+
+            gm, tt = getmatch(game['id'])
+            btn = gm['info']['team1_score'] + " - " + gm['info']['team2_score'] + " - " + gm['info']['status']
+
+            game['button'] = btn
+
+    else:
+
+        week_data = db.weekdata.find(query, {'games': True})
+        games = week_data[0]['games']
+
+        for game in games:
+
+            gm, tt = getmatch(game['id'])
+            btn = gm['info']['team1_score'] + " - " + gm['info']['team2_score'] + " - " + gm['info']['status']
+
+            game['button'] = btn
+
+    return games
+
+
 def updatematch(gameid):
 	query = {'game_id': str(gameid)}
 	db.gamedata.delete_many(query)
