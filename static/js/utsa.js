@@ -1,5 +1,6 @@
 $(document).ready( function () {
 
+    // Down n distance row expand/collapse
     $(function() {
 
         $("td[colspan=6]").closest("tr").hide();
@@ -15,42 +16,19 @@ $(document).ready( function () {
         });
     });
 
-	$('table:not(#downs)').DataTable({
+	$('table:not(#downs)').DataTable();
 
+    $('.drop-down-show-hide').hide();
 
-		initComplete: function (settings, json) {
-	        
-	      //   var api = this.api();
-			    // var footer = $(this).append('<tfoot><tr>');
-			    // this.api().columns().every(function () {
-			    //   var column = this;
-			    //   $(footer).append('<th>Totals</th>');
-			    // });
+    // Toggle Table view
+    $('#dropDown').change(function () {
 
-			    // $(footer).append('</tr></tfoot>');
+        $(this).find("option").each(function () {
 
-        },
+            $(document.getElementById(this.value)).hide();
+        });
 
-        footerCallback: function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-            // Total over this page
-            pageTotal = api
-                .column(2, { page: 'current'})
-                .data()
-                .reduce( function (a, b) {
-                    return parseInt(a)+parseInt(b);
-                }, 0);
-
-            postTotal(pageTotal);
-            //console.log($('tfoot th:eq(2)').html());    
-        }
+        $(document.getElementById(this.value)).show();
 
     });
-
-    function postTotal(total) {
-
-    	$('tfoot th:eq(2)').html(total + "T");
-    }
-
 });

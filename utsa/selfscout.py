@@ -4,14 +4,6 @@ import pandas as pd
 # Create reference to CSV file
 fpath = "utsa/Resources/selfscoutdata.xlsx"
 
-#pd.reset_option("all")
-#pd.set_option('precision', 0)
-
-# Import the CSV into a pandas DataFrame
-raw = pd.read_excel(fpath)
-
-raw["Name"]= raw["Name"].str.split(",", n = 1, expand = True)
-
 # ADD TEAM FILTER OPTION HERE IF THERE IS ONE 
 #raw = raw.loc[raw["Name"] == "20 08 UTSA OFF VS FAU DEF (10/31/2020)"]
 # OTHERWISE WERE SHOWING OVERALL RP
@@ -64,20 +56,29 @@ def addFormationSplit(df):
 
 	for index, row in df.iterrows():
 
-	    df.loc[index,'SPLITS'] = formations[row['FORM']]
+		# check if formation exists
+		if row['FORM'] in formations:
+
+			df.loc[index,'SPLITS'] = formations[row['FORM']]
+
+		else:
+
+			df.loc[index,'SPLITS'] = 'UNKNOWN'
 
 	df = df[["FORM", "SPLITS", "R/P",]]
 
 	return df
 
 
-# Only do this once otherwise errors
-# call after function is declared above
-# otherwise function doesnt exist
-# i.e sequence matters
-df = addFormationSplit(raw)
-
 def getRP():
+
+
+	# Import the CSV into a pandas DataFrame - needs to be done inside function or it will never refresh!
+	raw = pd.read_excel(fpath)
+
+	raw["Name"]= raw["Name"].str.split(",", n = 1, expand = True)
+
+	raw = addFormationSplit(raw)
 
 	overallrp = raw[["FORM", "R/P",]]
 	run = overallrp.loc[overallrp["R/P"] == "R"]
@@ -129,6 +130,13 @@ def getRP():
 
 # summary table
 def summaryTable():
+
+	# Import the CSV into a pandas DataFrame - needs to be done inside function or it will never refresh!
+	raw = pd.read_excel(fpath)
+
+	raw["Name"]= raw["Name"].str.split(",", n = 1, expand = True)
+
+	df = addFormationSplit(raw)
 
 	pers = raw
 	run = raw.loc[raw["R/P"] == "R"]
@@ -191,6 +199,11 @@ def summaryTable():
 
 def downs():
 
+	# Import the CSV into a pandas DataFrame - needs to be done inside function or it will never refresh!
+	raw = pd.read_excel(fpath)
+
+	raw["Name"]= raw["Name"].str.split(",", n = 1, expand = True)
+	
 	orp = raw[["FORM","Down","Distance","R/P",]]
 
 	# binning

@@ -13,7 +13,6 @@
     </script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <script src="http://cdn.datatables.net/plug-ins/1.10.12/api/sum().js"></script>
     <script src="/static/js/utsa.js?u={{ last_updated }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='utsa.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -37,54 +36,84 @@
     <br>
     <div class='container'>
         <h3 class='center'>Self Scout</h3>
-        <h6 class='center'>Data file Upload and Game filter will go here...</h6>
-        <br>
+<br>
+<br>
+        <h6 class='center'>NOTE: File being uploaded must be named exactly "selfscoutdata.xlsx"</h6>
+<br>
+		<h6 class='center'>    
+		    <form method="POST" action="" enctype="multipart/form-data">
+		      <input type="file" name="file">
+		      <input type="submit" value="Upload">
+		    </form>
+
+		    {% for file in fileInfo %}
+		      (Currently Reading from {{ file }})
+		      <br>
+		    {% endfor %}
+		</h6>
+
+<br>
+<br>
+        <h6 class='center'>
+        	
+        	<select id="dropDown">
+			    <option value="">--- Breakdown ---</option>
+			    <option value="div1">RP by Personnel</option>
+			    <option value="div2">RP by Formation</option>
+			    <option value="div3">RP by Down 'n Distance</option>
+			</select>
+        </h6>
+
         <h5 class='center'>Summary - R: {{ summary[0] }} ({{ summary[2] }} %) - P: {{ summary[1] }} ({{ summary[3] }} %)</h5>
-            {{ tables[0] | safe }}
 
-        <br>
+        <div id="div1" class="drop-down-show-hide">
+	            {{ tables[0] | safe }}
+        </div>
 
-        <h5 class='center'>Overall/Game RP by Formation</h5>
-            {{ tables[1] | safe }}
+	    <div id="div2" class="drop-down-show-hide">
+	        <h5 class='center'>RP by Formation</h5>
+	            {{ tables[1] | safe }}
+	    </div>
 
-        <br>
 
-        <h5 class='center'>Overall/Game RP by Down and Distance (Click row to see details)</h5>
-    <table id="downs" border="1" class="dataTable dataframe data">
-            <thead>
-            <tr style="text-align: right;">
-              <th>Down</th>
-              <th>Yd</th>
-              <th>R</th>
-              <th>P</th>
-              <th>R%</th>
-              <th>P%</th>
-            </tr>
-          </thead>
-        <tbody>
-            {% for d in down.keys() %}
-            <tr>
-                <td>{{ d[0] }}</td>
-                <td>{{ d[1] }}</td>
-                <td>{{ down[d]['R'] }}</td>
-                <td>{{ down[d]['P'] }}</td>
-                <td>{{ down[d]['R%'] }}</td>
-                <td>{{ down[d]['P%'] }}</td>
-            </tr>
-            <tr>
-                <td colspan="6">
-                <p>(Click to Collapse)
-                    <br>
-                    {% for e in expand[(d[0] | string )+"_"+d[1]] %}
-                        <br>
-                        {{ e[0] }}
-                    {% endfor %}
-                </p>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+		<div id="div3" class="drop-down-show-hide">
+	        <h5 class='center'>RP by Down and Distance (Click row to see formation details)</h5>
+	    		<table id="downs" border="1" class="dataTable dataframe data">
+			            <thead>
+			            <tr style="text-align: right;">
+			              <th>Down</th>
+			              <th>Yd</th>
+			              <th>R</th>
+			              <th>P</th>
+			              <th>R%</th>
+			              <th>P%</th>
+			            </tr>
+			          </thead>
+			        <tbody>
+			            {% for d in down.keys() %}
+			            <tr>
+			                <td>{{ d[0] }}</td>
+			                <td>{{ d[1] }}</td>
+			                <td>{{ down[d]['R'] }}</td>
+			                <td>{{ down[d]['P'] }}</td>
+			                <td>{{ down[d]['R%'] }}</td>
+			                <td>{{ down[d]['P%'] }}</td>
+			            </tr>
+			            <tr>
+			                <td colspan="6">
+			                <p>(Click to Collapse)
+			                    <br>
+			                    {% for e in expand[(d[0] | string )+"_"+d[1]] %}
+			                        <br>
+			                        {{ e[0] }}
+			                    {% endfor %}
+			                </p>
+			                </td>
+			            </tr>
+			            {% endfor %}
+			        </tbody>
+			    </table>
+		</div>
     </div>
 </body>
 </html>

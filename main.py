@@ -1,12 +1,14 @@
 import os
 import re
 import glob
+import datetime
 
 """
 NFL Scaws code adapated by https://github.com/SuperRonJon
 """
 
-from flask import Flask, jsonify, request, render_template, redirect
+from flask import Flask, jsonify, request, render_template, redirect, url_for, abort, send_from_directory
+from werkzeug.utils import secure_filename
 from forms import HoleForm
 import NFLScores as nfl
 import utsa
@@ -17,6 +19,11 @@ app = Flask(__name__, static_url_path='/static')
 
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
+
+# file upload for utsa
+# https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask
+app.config['UPLOAD_EXTENSIONS'] = ['.xlsx']
+app.config['UPLOAD_PATH'] = 'utsa/Resources'
 
 
 # Use this code snipped because flask caches static files
@@ -42,11 +49,22 @@ def home():
 @app.route('/utsa')
 def selfscout():
 
+    files = os.listdir(app.config['UPLOAD_PATH'])
+    fileInfo = []
+
+    for file in files:
+
+        info = os.stat(os.path.join(app.config['UPLOAD_PATH'], file))
+        lu = info.st_mtime
+
+        mod_timestamp = datetime.datetime.fromtimestamp(lu).strftime('%m-%d-%Y %I:%M %p')
+        fileInfo.append(str(file) + " uploaded " + str(mod_timestamp))
+
     overall = utsa.getRP()
     total,summary = utsa.summaryTable()
     down, expand = utsa.downs()
 
-    return render_template('utsa.html', last_updated=last_updated, down=down,expand=expand,summary=summary, tables=[total.to_html(classes='data', header='true', index=False), overall.to_html(classes='data', header='true', index=False)])
+    return render_template('utsa.html', fileInfo=fileInfo, last_updated=last_updated, down=down,expand=expand,summary=summary, tables=[total.to_html(classes='data', header='true', index=False), overall.to_html(classes='data', header='true', index=False)])
 
 
 @app.route('/gps')
@@ -99,6 +117,29 @@ def update_match(gameid):
         nfl.updatematch(gameid)
         
         return redirect('/match/' + str(gameid))
+
+
+@app.route('/utsa', methods=['POST'])
+def upload_files():
+    uploaded_file = request.files['file']
+    filename = secure_filename(uploaded_file.filename)
+
+    if filename != '':
+
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+            
+            abort(400)
+
+        uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+
+    return redirect('/utsa')
+
+
+@app.route('/utsa/Resources/<filename>')
+def upload(filename):
+    return send_from_directory(app.config['UPLOAD_PATH'], filename)
+
 
 
 if __name__ == '__main__':
