@@ -2,7 +2,8 @@
 import pandas as pd
 
 # Create reference to CSV file
-fpath = "utsa/Resources/selfscoutdata.xlsx"
+#fpath = "utsa/Resources/selfscoutdata.xlsx"
+fpath = "https://storage.googleapis.com/utsa/selfscoutdata9.xlsx"
 
 # ADD TEAM FILTER OPTION HERE IF THERE IS ONE 
 #raw = raw.loc[raw["Name"] == "20 08 UTSA OFF VS FAU DEF (10/31/2020)"]

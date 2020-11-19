@@ -1,4 +1,5 @@
 import os, time
+import logging
 import re
 import glob
 import datetime
@@ -13,6 +14,7 @@ NFL Scaws code adapated by https://github.com/SuperRonJon
 """
 
 from flask import Flask, jsonify, request, render_template, redirect, url_for, abort, send_from_directory
+from google.cloud import storage
 from werkzeug.utils import secure_filename
 from forms import HoleForm
 import NFLScores as nfl
@@ -27,9 +29,13 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 # file upload for utsa
 # https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask
-app.config['UPLOAD_EXTENSIONS'] = ['.xlsx']
-app.config['UPLOAD_PATH'] = 'utsa/Resources'
 
+CLOUD_STORAGE_BUCKET = 'utsa'
+# Create a Cloud Storage client.
+gcs = storage.Client()
+
+# Get the bucket that the file will be uploaded to.
+bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
 
 # Use this code snipped because flask caches static files
 # returns the last update timestamp for js folder (can specify dir or file in this method)
@@ -54,22 +60,13 @@ def home():
 @app.route('/utsa')
 def selfscout():
 
-    files = os.listdir(app.config['UPLOAD_PATH'])
-    fileInfo = []
-
-    for file in files:
-
-        info = os.stat(os.path.join(app.config['UPLOAD_PATH'], file))
-        lu = info.st_mtime
-
-        mod_timestamp = datetime.datetime.fromtimestamp(lu).strftime('%m-%d-%Y %I:%M %p')
-        fileInfo.append(str(file) + " uploaded " + str(mod_timestamp))
-
     overall = utsa.getRP()
     total,summary = utsa.summaryTable()
     down, expand = utsa.downs()
 
-    return render_template('utsa.html', fileInfo=fileInfo, last_updated=last_updated, down=down,expand=expand,summary=summary, tables=[total.to_html(classes='data', header='true', index=False), overall.to_html(classes='data', header='true', index=False)])
+    ssFile = getssFile()
+
+    return render_template('utsa.html', ssFile=ssFile, last_updated=last_updated, down=down,expand=expand,summary=summary, tables=[total.to_html(classes='data', header='true', index=False), overall.to_html(classes='data', header='true', index=False)])
 
 
 @app.route('/gps')
@@ -124,26 +121,50 @@ def update_match(gameid):
         return redirect('/match/' + str(gameid))
 
 
+# GCP Cloud Storage file upload (regular file upload not supported in GCP)
 @app.route('/utsa', methods=['POST'])
 def upload_files():
-    uploaded_file = request.files['file']
-    filename = secure_filename(uploaded_file.filename)
+    uploaded_file = request.files.get('file')
 
-    if filename != '':
+    if not uploaded_file:
+        return 'No file uploaded.', 400
 
-        file_ext = os.path.splitext(filename)[1]
-        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-            
-            abort(400)
+    # a blob is a file, delete all the files and then upload new (overwrite workaround)
+    blobs = bucket.list_blobs()
+    for blob in blobs:
+        blob.delete()
 
-        uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+    # Create a new blob and upload the file's content.
+    blob = bucket.blob(uploaded_file.filename)
+
+    blob.upload_from_string(
+        uploaded_file.read(),
+        content_type=uploaded_file.content_type
+    )
+
+    # The public URL can be used to directly access the uploaded file via HTTPS.
+    global ssFile
+    global upload_date
+    ssFile = blob.public_url
+    upload_date = blob.time_created
 
     return redirect('/utsa')
 
+def getssFile():
+    is_global = "ssFile" in globals()
 
-@app.route('/utsa/Resources/<filename>')
-def upload(filename):
-    return send_from_directory(app.config['UPLOAD_PATH'], filename)
+    if is_global:
+        return ssFile + ' uploaded ' + upload_date.strftime('%m-%d-%Y %I:%M %p')
+    else:
+        return "No file yet."
+
+@app.errorhandler(500)
+def server_error(e):
+    logging.exception('An error occurred during a request.')
+    return """
+    An internal error occurred: <pre>{}</pre>
+    See logs for full stacktrace.
+    """.format(e), 500
 
 
 
