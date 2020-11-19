@@ -3,10 +3,7 @@
 // Initialize - get location
 var currentLat = 0.0;
 var currentLon = 0.0;
-// Initialize Last Shot location (for displaying driving distance)
-var previousLat = 0.0;
-var previousLon = 0.0;
-var yardsFromLastShot = 0;
+var yardsFromTee = 0;
 // don't set default to 0, look in getYardage logic
 var accuracy = 100.0;
 
@@ -19,18 +16,13 @@ var hole = "";
 var key = "";
 var lat = 0.0;
 var lon = 0.0;
+// tee box coords
+var lat_t = 0.0;
+var lon_t = 0.0;
 var yardage = 0;
 var loc_id = 0;
 var now = "";
 
-// crappy solution to try and get the most accurate yardage :| the equivalent of clicking 7 times
-function fireoff() {
-
-    for (var x = 1; x < 8; x++) getYardage(x);
-
-    previousLat = currentLat;
-    previousLon = currentLon;
-}
 
 // Look at this for ajax backend processing https://medium.com/@doobeh/posting-a-wtform-via-ajax-with-flask-b977782edeee
 function getYardage() {
@@ -42,6 +34,10 @@ function getYardage() {
     key = course + "" + hole;
     lat = coordinates[key].lat;
     lon = coordinates[key].lon;
+
+    lat_t = teeboxes[key].lat;
+    lon_t = teeboxes[key].lon;
+
     yardage = 0;
     var index = 0;
     
@@ -57,16 +53,16 @@ function getYardage() {
         switch(index) {
 
             case 1:
-                yd.innerHTML = "spazzing.";
-                myLoc.innerHTML = "Zeroing In." + accuracy + "";
+                yd.innerHTML = ".";
+                myLoc.innerHTML = "Side please." + accuracy + "";
                 break;
             case 2:
-                yd.innerHTML = "spazzing..";
-                myLoc.innerHTML = "Zeroing In.." + accuracy + "";
+                yd.innerHTML = "..";
+                myLoc.innerHTML = "Side please.." + accuracy + "";
                 break;
             default:
-                yd.innerHTML = "spazzing...";
-                myLoc.innerHTML = "Zeroing In..." + accuracy + "";
+                yd.innerHTML = "...";
+                myLoc.innerHTML = "Side please..." + accuracy + "";
                 break;
         }
         
@@ -80,11 +76,9 @@ function getYardage() {
             yd.innerHTML = Math.round(yardage);
             stamp.innerHTML = now;
 
-            
-            if (previousLat != 0.0)
-                yardsFromLastShot = getDistanceFromLatLonInYd(currentLat, currentLon, previousLat, previousLon);
+            yardsFromTee = getDistanceFromLatLonInYd(currentLat, currentLon, lat_t, lon_t);
 
-            myLoc.innerHTML = "Last shot: " + Math.round(yardsFromLastShot) +  " yds (-+" + accuracy + ")";
+            myLoc.innerHTML = "Yds from Tee: " + Math.round(yardsFromTee) +  " yds (-+" + accuracy + ")";
         }
 
     }, 1000);
