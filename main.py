@@ -1,7 +1,12 @@
-import os
+import os, time
 import re
 import glob
 import datetime
+
+# switch timezone in GCP, nt means windows. windows doesnt have time.tzset() support
+if os.name != 'nt':
+    os.environ['TZ'] = 'America/Chicago'
+    time.tzset()
 
 """
 NFL Scaws code adapated by https://github.com/SuperRonJon
