@@ -1,13 +1,17 @@
 # Import Dependencies
 import pandas as pd
 
-# Create reference to CSV file
-#fpath = "utsa/Resources/selfscoutdata.xlsx"
-fpath = "https://storage.googleapis.com/utsa/selfscoutdata9.xlsx"
-
 # ADD TEAM FILTER OPTION HERE IF THERE IS ONE 
 #raw = raw.loc[raw["Name"] == "20 08 UTSA OFF VS FAU DEF (10/31/2020)"]
 # OTHERWISE WERE SHOWING OVERALL RP
+
+def initiateRawDF():
+
+	# Create reference to ss file
+	#fpath = "utsa/Resources/selfscoutdata.xlsx"
+	fpath = "https://storage.googleapis.com/utsa/selfscoutdata.xlsx"
+	return fpath
+
 
 def addFormationSplit(df):
 
@@ -74,6 +78,8 @@ def addFormationSplit(df):
 def getRP():
 
 
+	fpath = initiateRawDF()
+
 	# Import the CSV into a pandas DataFrame - needs to be done inside function or it will never refresh!
 	raw = pd.read_excel(fpath)
 
@@ -131,6 +137,8 @@ def getRP():
 
 # summary table
 def summaryTable():
+
+	fpath = initiateRawDF()
 
 	# Import the CSV into a pandas DataFrame - needs to be done inside function or it will never refresh!
 	raw = pd.read_excel(fpath)
@@ -200,6 +208,8 @@ def summaryTable():
 
 def downs():
 
+	fpath = initiateRawDF()
+	
 	# Import the CSV into a pandas DataFrame - needs to be done inside function or it will never refresh!
 	raw = pd.read_excel(fpath)
 

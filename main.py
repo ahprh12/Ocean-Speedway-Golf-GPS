@@ -13,9 +13,8 @@ if os.name != 'nt':
 NFL Scaws code adapated by https://github.com/SuperRonJon
 """
 
-from flask import Flask, jsonify, request, render_template, redirect, url_for, abort, send_from_directory
+from flask import Flask, jsonify, request, render_template, redirect
 from google.cloud import storage
-from werkzeug.utils import secure_filename
 from forms import HoleForm
 import NFLScores as nfl
 import utsa
@@ -149,6 +148,7 @@ def upload_files():
     upload_date = blob.time_created
 
     return redirect('/utsa')
+
 
 def getssFile():
     is_global = "ssFile" in globals()
