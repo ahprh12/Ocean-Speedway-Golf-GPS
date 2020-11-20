@@ -4,10 +4,6 @@ import re
 import glob
 import datetime
 
-# switch timezone in GCP, nt means windows. windows doesnt have time.tzset() support
-if os.name != 'nt':
-    os.environ['TZ'] = 'America/Chicago'
-    time.tzset()
 
 """
 NFL Scaws code adapated by https://github.com/SuperRonJon
@@ -61,8 +57,10 @@ def selfscout():
 
     ssBlob = list(bucket.list_blobs())[0]
 
-    ssFile = 'Reading from ' + str(ssBlob.public_url) + ' uploaded ' + str(ssBlob.time_created.strftime('%m-%d-%Y %I:%M %p'))
+    date_default_timezone_set("America/Chicago");
+    ssFile = 'Currently Reading from <a href=' + str(ssBlob.public_url) + '> uploaded ' + str(ssBlob.time_created.strftime('%m-%d-%Y %I:%M %p'))
 
+    #fpath = "utsa/Resources/selfscoutdata.xlsx" use this for testing
     overall = utsa.getRP(ssBlob.public_url)
     total,summary = utsa.summaryTable(ssBlob.public_url)
     down, expand = utsa.downs(ssBlob.public_url)
@@ -152,14 +150,6 @@ def upload_files():
 
     return redirect('/utsa')
 
-
-def getssFile():
-    is_global = "ssFile" in globals()
-
-    if is_global:
-        return ssFile + ' uploaded ' + upload_date.strftime('%m-%d-%Y %I:%M %p')
-    else:
-        return "No file yet."
 
 @app.errorhandler(500)
 def server_error(e):

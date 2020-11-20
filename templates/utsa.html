@@ -38,8 +38,6 @@
         <h3 class='center'>Self Scout</h3>
 <br>
 <br>
-        <h6 class='center'>NOTE: File being uploaded must be named exactly "selfscoutdata.xlsx"</h6>
-<br>
 		<h6 class='center'>    
 		    <form method="POST" action="" enctype="multipart/form-data">
 		      <input type="file" name="file">
@@ -47,7 +45,7 @@
 		    </form>
 
 		      <br>
-		    {{ ssFile }}
+		    {{ ssFile | safe }}
 		</h6>
 
 <br>

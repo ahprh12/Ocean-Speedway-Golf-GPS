@@ -1,18 +1,9 @@
 # Import Dependencies
 import pandas as pd
 
-
 # ADD TEAM FILTER OPTION HERE IF THERE IS ONE 
 #raw = raw.loc[raw["Name"] == "20 08 UTSA OFF VS FAU DEF (10/31/2020)"]
 # OTHERWISE WERE SHOWING OVERALL RP
-
-def initiateRawDF():
-
-	# Create reference to ss file
-    #fpath = "utsa/Resources/selfscoutdata.xlsx"
-    fpath = "https://storage.googleapis.com/utsa/selfscoutdata.xlsx"
-    return fpath
-
 
 def addFormationSplit(df):
 
