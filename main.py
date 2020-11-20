@@ -59,11 +59,14 @@ def home():
 @app.route('/utsa')
 def selfscout():
 
-    overall = utsa.getRP()
-    total,summary = utsa.summaryTable()
-    down, expand = utsa.downs()
+    ssBlob = list(bucket.list_blobs())[0]
 
-    ssFile = getssFile()
+    ssFile = 'Reading from ' + str(ssBlob.public_url) + ' uploaded ' + str(ssBlob.time_created.strftime('%m-%d-%Y %I:%M %p'))
+
+    overall = utsa.getRP(ssBlob.public_url)
+    total,summary = utsa.summaryTable(ssBlob.public_url)
+    down, expand = utsa.downs(ssBlob.public_url)
+
 
     return render_template('utsa.html', ssFile=ssFile, last_updated=last_updated, down=down,expand=expand,summary=summary, tables=[total.to_html(classes='data', header='true', index=False), overall.to_html(classes='data', header='true', index=False)])
 
