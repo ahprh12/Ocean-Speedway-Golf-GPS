@@ -17,6 +17,7 @@ class HoleForm(Form):
             ('asp', 'San Pedro 9'),
             ('wc', 'Windcrest'),
             ('gctx', 'Golf Club of Texas'),
+            ('cr', 'Coyote Ridge'),
             ('crr', 'Coyote Ridge Range')
         ]
     )
