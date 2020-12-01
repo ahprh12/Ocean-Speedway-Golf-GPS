@@ -18,6 +18,7 @@ class HoleForm(Form):
             ('wc', 'Windcrest'),
             ('gctx', 'Golf Club of Texas'),
             ('cr', 'Coyote Ridge'),
+            ('rc', 'Rebecca Creek'),
             ('crr', 'Coyote Ridge Range')
         ]
     )
