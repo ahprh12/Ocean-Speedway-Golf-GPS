@@ -20,7 +20,8 @@ class HoleForm(Form):
             ('cr', 'Coyote Ridge'),
             ('rc', 'Rebecca Creek'),
             ('wcd', 'Watters Creek 6'),
-            ('crr', 'Coyote Ridge Range')
+            ('crr', 'Coyote Ridge Range'),
+            ('tof', 'Trails of Frisco')
         ]
     )
 
