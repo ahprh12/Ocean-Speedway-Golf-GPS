@@ -190,6 +190,6 @@ html:
 # Styling options for the HTML report
     style:
       theme: flatly
-      logo: "bailey.png"
+      logo: ""
       primary_color: "#1b002b"
       full_width: False
