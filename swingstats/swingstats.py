@@ -15,10 +15,10 @@ def showClubProfile(selection):
 
     if cdf.empty:
         
-        profile = ProfileReport(df, title='Swing Stats - ALL CLUBS')
+        profile = ProfileReport(df, title='Swing Stats - ALL CLUBS', config_file="min_config.yaml")
     
         return profile
 
-    profile = ProfileReport(cdf, title=selection + ' Swing Stats')
+    profile = ProfileReport(cdf, title=selection + ' Swing Stats', config_file="min_config.yaml")
     
     return profile
