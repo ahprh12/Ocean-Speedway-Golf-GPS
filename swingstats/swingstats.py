@@ -9,10 +9,16 @@ from pandas_profiling import ProfileReport
 # Put below code in function passing in club selection as parameter
 def showClubProfile(selection):
 
-    df = pd.read_excel('golfstats.xlsx')
-    df = df[df['Club'] == selection]
-    df = df.drop(columns=['Club'])
+    df = pd.read_excel('swingstats/golfstats.xlsx')
+    cdf = df[df['Club'] == selection]
+    cdf = cdf.drop(columns=['Club'])
 
-    profile = ProfileReport(df, title=selection + ' Swing Stats')
+    if cdf.empty:
+        
+        profile = ProfileReport(df, title='Swing Stats - ALL CLUBS')
+    
+        return profile
+
+    profile = ProfileReport(cdf, title=selection + ' Swing Stats')
     
     return profile

@@ -11,35 +11,34 @@
       integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
       crossorigin="anonymous">
     </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <title>Swing Stats</title>
 </head>
 <body>
     <div class="w3-display-topright w3-padding-large w3-xlarge">
-        <a href="/">
-            <img src="/static/images/bailey.png" width="60px" height="60px">
-        </a>
+        
     </div>
-    <br>
-    <br>
-    <br>
     <br>
     <div class='container'>
         <br>
-        <br>
-        <h6 class='center'>Club Seelacsun Pleej
-        	<a href="/swingstats/DRIVER">Diver</a>
-        	<a href="/swingstats/AW">Gyap Vedge</a>
-        	<a href="/swingstats/PW">Pitching Vedge</a>
-        	<a href="/swingstats/9">9 iron</a>
-        	<a href="/swingstats/8">8 iron</a>
-        	<a href="/swingstats/7">Peven</a>
-        	<a href="/swingstats/6">Sixer</a>
+        <h6 class='center'>
+            <a href="/">
+            <img src="/static/images/bailey.png" width="40px" height="40px">
+        </a>
+            <br>
+            <br>
+        	<a href="/swingstats/DRIVER">Diver</a> -
+            <a href="/swingstats/AW">Gyap Vedge</a> -
+            <a href="/swingstats/PW">Pitching Vedge</a> -
+            <a href="/swingstats/9">9 iron</a> -
+            <a href="/swingstats/8">8 iron</a> -
+            <a href="/swingstats/7">Peven</a> -
+            <a href="/swingstats/6">Sixer</a>
         </h6>
         <br>
-        <br>
-        {{ profile }}
+        {{ profile | safe }}
     </div>
 </body>
 </html>

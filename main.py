@@ -67,14 +67,8 @@ def gps():
 @app.route('/swingstats/<club>')
 def showSwingStats(club):
 
-    if club is None:
-
-        return render_template('swingstats.html', profile='Select club to view stats.')
-
-    else:
-
         profile = swingstats.showClubProfile(club)
-        return render_template('swingstats.html', profile=profile)
+        return render_template('swingstats.html', profile=profile.to_html())
 
 
 @app.route('/nfl')
